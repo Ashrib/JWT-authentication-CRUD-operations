@@ -1,0 +1,87 @@
+.main{
+  height: calc(100vh);
+}
+.nav{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+  background-color: rgb(41, 41, 41);
+  color: white;
+  font-size: 1.5em;
+}
+.form-div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+.theForm{
+  display: flex;
+  box-shadow: 0px 0px 15px black;
+  padding: 10px;
+  margin: 20px 0px 20px 0px;
+  height: 300px;
+  width: 450px;
+  border-radius: 5px;
+}
+.theForm>form, .form-row{
+  display: flex;
+  flex-direction: column;
+}
+.theForm>form{
+  justify-content: space-around;
+  width: 100%;
+}
+
+.products-container{
+  height: 245px;
+  overflow-y: scroll;
+}
+.form-row>input{
+  width: 100%;
+  padding: 2px 5px;
+}
+.form-row>span{
+  color: red;
+  font-size: 0.8em;
+  max-width: 400px;
+  overflow-wrap: break-word;
+}
+.error-span{
+  color: red;
+  font-size: 0.7em;
+}
+.products-container::-webkit-scrollbar{
+  width: 10px;
+}
+.products-container::-webkit-scrollbar-thumb{
+  background-color: rgb(28, 27, 27);
+  border-radius: 10px;
+}
+.products-container::-webkit-scrollbar-thumb:hover{
+  background-color: rgb(108, 107, 107);
+}
+.products-container::-webkit-scrollbar-track{
+  background-color: transparent;
+}
+
+.spinner-div{
+  position: absolute;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.233);
+  height: calc(100vh);
+  width: calc(100vw);
+  display: none;
+}
+.spinner{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20%;
+}
+@media screen and (max-width: 450px) {
+  .theForm{
+    width: 90%;
+  } 
+}
