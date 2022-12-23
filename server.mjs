@@ -2,6 +2,9 @@ import express from 'express';
 import path from 'path';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
+
 
 const app = express()
 const port = process.env.PORT || 3000;
