@@ -4,6 +4,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
+import {stringToHash,varifyHash} from "bcrypt-inzi";
 
 const SECRET = process.env.SECRET || "topsecret";
 
@@ -123,7 +124,7 @@ app.post("/login", (req, res) => {
     // check if user exist
     userModel.findOne(
         { email: body.email },
-        "firstName lastName email password",
+        "firstName lastName email password",    //projection (the data you want)
         (err, data) => {
             if (!err) {
                 console.log("data: ", data);
@@ -142,11 +143,11 @@ app.post("/login", (req, res) => {
                                 exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24),
                             }, SECRET);
 
-                            console.log("token: ", token);
+                            console.log("token: ", token);//**** not console
 
                             res.cookie('Token', token, {
                                 maxAge: 86_400_000,
-                                httpOnly: true
+                                 httpOnly: true
                             });
 
                             res.send({
@@ -179,7 +180,58 @@ app.post("/login", (req, res) => {
             }
         })
 })
+router.get("/logout", (req, res) => {
+    res.cookie('Token', '', {
+        maxAge: 1,
+        httpOnly: true,
+        path:"/"
+    });
 
+    res.send({ message: "Logout successful" });
+
+})
+
+
+
+router.use((req, res, next) => {
+
+    console.log("req.cookies: ", req.cookies);//*******not
+
+    if (!req?.cookies?.Token) {
+        res.status(401).send({
+            message: "include http-only credentials with every request"
+        })
+        return;
+    }
+
+    jwt.verify(req.cookies.Token, SECRET, function (err, decodedData) {
+        if (!err) {
+
+            console.log("decodedData: ", decodedData);
+
+            const nowDate = new Date().getTime() / 1000;
+
+            if (decodedData.exp < nowDate) {
+
+                res.status(401);
+                res.cookie('Token', '', {
+                    maxAge: 1,
+                    httpOnly: true
+                });
+                res.send({ message: "token expired" })
+
+            } else {
+
+                console.log({message: "token approved"});
+
+                req.body.token = decodedData
+                next();
+            }
+        } else {
+            res.status(401).send("invalid token")
+        }
+    });
+})
 
 
 
